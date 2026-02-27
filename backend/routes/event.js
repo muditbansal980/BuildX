@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { requireAuth } = require("@clerk/express");
-const { handleEvent } = require("../controller/event");
+const { handleEvent,handleyourevents } = require("../controller/event");
 
-router.get("/", requireAuth(), handleEvent);
+router.get("/", handleEvent);
+router.get("/your-events", handleyourevents);
 
 module.exports = router;

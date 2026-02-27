@@ -77,4 +77,26 @@ async function handlecompany(req,res){
         return res.status(500).json({ ok: false, message: "Server error" });
     }
 }
-module.exports = { handleuser,handlecandidate,handlecompany };
+
+async function getUserRole(req, res) {
+    try {
+        const clerkUserId = req.auth?.userId;
+        if (!clerkUserId) return res.status(401).json({ ok: false, message: "Unauthorized" });
+        
+        const result = await pool.query(
+            `SELECT id, clerk_user_id, username, email, role FROM users WHERE clerk_user_id = $1`,
+            [clerkUserId]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.json({ ok: true, user: null }); // User doesn't exist yet
+        }
+        
+        return res.json({ ok: true, user: result.rows[0] });
+    } catch (err) {
+        console.log("DB ERROR:", err.code, err.message);
+        return res.status(500).json({ ok: false, message: "Server error" });
+    }
+}
+
+module.exports = { handleuser, handlecandidate, handlecompany, getUserRole };

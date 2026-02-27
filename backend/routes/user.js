@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router()
-const { requireAuth } = require("@clerk/express");
-const {handleuser,handlecandidate,handlecompany} = require("../controller/user")
-router.post("/", requireAuth(),handleuser)
-router.put("/candidate", requireAuth(),handlecandidate)
-router.put("/company", requireAuth(),handlecompany)
+const {handleuser,handlecandidate,handlecompany,getUserRole} = require("../controller/user")
+router.post("/", handleuser)
+router.get("/profile", getUserRole)
+router.put("/candidate", handlecandidate)
+router.put("/company", handlecompany)
 module.exports=router;
